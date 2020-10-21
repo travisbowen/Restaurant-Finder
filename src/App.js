@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import Dropdown from "./components/Dropdown";
 import RestaurantsTable from "./components/RestaurantsTable";
+import SearchBar from "./components/SearchBar";
 
 function App() {
 	const [restaurants, setRestaurants] = useState([]);
@@ -117,6 +118,7 @@ function App() {
 		<div className='app'>
 			<h1>Restaurant Finder</h1>
 			<div className='app__header'>
+				<SearchBar />
 				<Dropdown list={states}></Dropdown>
 				<Dropdown list={genre}></Dropdown>
 			</div>
