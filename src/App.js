@@ -119,8 +119,8 @@ function App() {
 			<h1>Restaurant Finder</h1>
 			<div className='app__header'>
 				<SearchBar />
-				<Dropdown list={states}></Dropdown>
-				<Dropdown list={genre}></Dropdown>
+				<Dropdown typeList='state' list={states}></Dropdown>
+				<Dropdown typeList='genre' list={genre}></Dropdown>
 			</div>
 			<RestaurantsTable restaurants={restaurants} />
 		</div>
