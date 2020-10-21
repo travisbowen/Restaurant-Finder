@@ -1,0 +1,20 @@
+.restaurants__table {
+	margin-top: 150px;
+	overflow: scroll;
+	height: 500px;
+	color: #6a5d5d;
+	background-color: #ffffff;
+}
+
+.restaurants__table tr {
+	display: flex;
+	justify-content: space-between;
+}
+
+.restaurants__table td {
+	padding: 0.5rem;
+}
+
+.restaurants__table tr:nth-of-type(odd) {
+	background-color: #f3f2f8;
+}

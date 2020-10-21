@@ -18,11 +18,13 @@ function App() {
 			)
 				.then((response) => response.json())
 				.then((data) => {
+					console.log(data);
 					data.sort(sortRestaurants);
 					setRestaurants(data);
 				});
 		};
 
+		// Call restaurant data function
 		getRestaurantsData();
 	}, []);
 
