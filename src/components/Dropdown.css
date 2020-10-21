@@ -21,6 +21,9 @@
 	min-width: 160px;
 	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 	z-index: 1;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 250px;
 }
 
 .dropdown__content a {
@@ -33,7 +36,6 @@
 .dropdown__content a:hover {
 	background-color: #ddd;
 }
-
 
 .dropdown:hover .dropdown__content {
 	display: block;
