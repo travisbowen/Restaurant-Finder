@@ -97,6 +97,7 @@ function App() {
 		} else {
 			let filteredRestaurantsTemp = [];
 
+			// Search only works if used first
 			if (search !== "") {
 				filteredRestaurantsTemp = restaurants.filter((restaurant) => {
 					if (
