@@ -92,7 +92,6 @@ function App() {
 	}, []);
 
 	const filterRestaurants = useCallback(() => {
-		// console.log("searchValue", searchValue);
 		if (genre === "ALL" || state === "ALL") {
 			setFilteredRestaurants(restaurants);
 		} else {
@@ -114,7 +113,6 @@ function App() {
 
 			if (state !== "") {
 				const r = isFiltered.current ? filteredRestaurantsTemp : restaurants;
-				console.log("r", r);
 				filteredRestaurantsTemp = r.filter((restaurant) => {
 					if (restaurant.state === state) {
 						return restaurant;
@@ -153,10 +151,6 @@ function App() {
 			setGenre(searchValue);
 		}
 	};
-	//
-	// const handleSearchSubmit = (searchValue) => {
-	//   setSearch(searchValue);
-	// };
 
 	// Sorts restaurant genres and adds to state
 	function sortRestaurantGenres(data) {

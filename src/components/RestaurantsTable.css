@@ -1,9 +1,13 @@
-.restaurants__table {
-	margin-top: 50px;
+.restaurants__tableDiv {
 	overflow: scroll;
 	height: 500px;
 	color: #6a5d5d;
 	background-color: #ffffff;
+	margin: 0 auto;
+}
+
+.restaurants__tableBody {
+	align-items: center;
 }
 
 .restaurants__table tr {
