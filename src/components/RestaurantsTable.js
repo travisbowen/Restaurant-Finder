@@ -10,7 +10,7 @@ function RestaurantsTable({ restaurants }) {
 					<td>{name}</td>
 					<td>
 						<strong>
-							{city},{state}
+							{city}, {state}
 						</strong>
 					</td>
 					<td>{telephone}</td>

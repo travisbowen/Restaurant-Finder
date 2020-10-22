@@ -1,26 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "./SearchBar.css";
-import { useStateValue } from "../utils/stateprovider";
 
-function SearchBar() {
-	const [{ search }, dispatch] = useStateValue();
+function SearchBar({ dataSearchInput, onSubmit }) {
+	const [searchTerm, setSearchTerm] = useState("");
 
-	const onSearchSubmit = (searchTerm) => {
-		// Dispatch the search term into the data layer
-		dispatch({
-			type: "ADD_SEARCH",
-			search: searchTerm,
-		});
+	const onSearchChange = (event) => {
+		const searchValue = event.target.value;
+		setSearchTerm(searchValue);
+	};
+
+	const onSearchSubmit = (event) => {
+		event.preventDefault();
+		onSubmit(searchTerm);
 	};
 
 	return (
 		<div className='searchbar'>
-			<input
-				placeholder='Search by Name, City, or Genre'
-				value={search}
-				type='text'
-				onChange={(event) => onSearchSubmit(event.target.value)}
-			/>
+			<form onSubmit={onSearchSubmit}>
+				<input
+					data-search-input={dataSearchInput}
+					placeholder='Search by Name, City, or Genre'
+					value={searchTerm}
+					type='text'
+					onChange={onSearchChange}
+				/>
+			</form>
 		</div>
 	);
 }

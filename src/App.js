@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import Dropdown from "./components/Dropdown";
 import RestaurantsTable from "./components/RestaurantsTable";
@@ -6,8 +6,14 @@ import SearchBar from "./components/SearchBar";
 
 function App() {
 	const [restaurants, setRestaurants] = useState([]);
-	const [genre, setGenre] = useState(["ALL", ""]);
-	const [states, setStates] = useState([
+	const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+	const [genreList, setGenreList] = useState(["ALL", ""]);
+	const [genre, setGenre] = useState("");
+	const [state, setState] = useState("");
+	const [search, setSearch] = useState("");
+	const [buttonStateTitle, setButtonStateTitle] = useState("ALL");
+	const [buttonGenreTitle, setButtonGenreTitle] = useState("ALL");
+	const [statesList, setStates] = useState([
 		"ALL",
 		"AZ",
 		"AL",
@@ -60,6 +66,7 @@ function App() {
 		"WI",
 		"WY",
 	]);
+	const isFiltered = useRef(false);
 
 	// Runs only once to get data
 	useEffect(() => {
@@ -75,14 +82,81 @@ function App() {
 				.then((response) => response.json())
 				.then((data) => {
 					data.sort(sortRestaurantsAlphabetically);
-					setRestaurants(data);
 					sortRestaurantGenres(data);
+					setRestaurants(data);
+					setFilteredRestaurants(data);
 				});
 		};
-
 		// Call restaurant data function
 		getRestaurantsData();
 	}, []);
+
+	const filterRestaurants = useCallback(() => {
+		// console.log("searchValue", searchValue);
+		if (genre === "ALL" || state === "ALL") {
+			setFilteredRestaurants(restaurants);
+		} else {
+			let filteredRestaurantsTemp = [];
+
+			if (search !== "") {
+				filteredRestaurantsTemp = restaurants.filter((restaurant) => {
+					if (
+						restaurant.city === search ||
+						restaurant.genre === search ||
+						restaurant.name === search ||
+						restaurant.state === search
+					) {
+						return restaurant;
+					}
+				});
+				isFiltered.current = true;
+			}
+
+			if (state !== "") {
+				const r = isFiltered.current ? filteredRestaurantsTemp : restaurants;
+				console.log("r", r);
+				filteredRestaurantsTemp = r.filter((restaurant) => {
+					if (restaurant.state === state) {
+						return restaurant;
+					}
+				});
+				isFiltered.current = true;
+			}
+
+			if (genre !== "") {
+				const r = isFiltered.current ? filteredRestaurantsTemp : restaurants;
+				filteredRestaurantsTemp = r.filter((g) =>
+					g.genre.split(",").includes(genre),
+				);
+			}
+
+			setFilteredRestaurants(filteredRestaurantsTemp);
+			isFiltered.current = false;
+		}
+	}, [genre, search, state]);
+
+	useEffect(() => {
+		filterRestaurants();
+	}, [filterRestaurants]);
+
+	const handleSearchDropdownChange = (event) => {
+		// Prevent the page from reloading
+		event.preventDefault();
+		const searchInput = event.target.dataset.searchInput;
+		const searchValue = event.target.getAttribute("href");
+
+		if (searchInput === "state") {
+			setButtonStateTitle(searchValue);
+			setState(searchValue);
+		} else if (searchInput === "genre") {
+			setButtonGenreTitle(searchValue);
+			setGenre(searchValue);
+		}
+	};
+	//
+	// const handleSearchSubmit = (searchValue) => {
+	//   setSearch(searchValue);
+	// };
 
 	// Sorts restaurant genres and adds to state
 	function sortRestaurantGenres(data) {
@@ -96,7 +170,7 @@ function App() {
 				}
 			}
 		}
-		setGenre(genreArray);
+		setGenreList(genreArray);
 	}
 
 	// Sorts restaurant names
@@ -118,11 +192,21 @@ function App() {
 		<div className='app'>
 			<h1>Restaurant Finder</h1>
 			<div className='app__header'>
-				<SearchBar />
-				<Dropdown typeList='state' list={states}></Dropdown>
-				<Dropdown typeList='genre' list={genre}></Dropdown>
+				<SearchBar dataSearchInput='search' onSubmit={setSearch} />
+				<Dropdown
+					buttonTitle={buttonStateTitle}
+					dataSearchInput='state'
+					onDropDownClick={handleSearchDropdownChange}
+					list={statesList}
+				/>
+				<Dropdown
+					buttonTitle={buttonGenreTitle}
+					dataSearchInput='genre'
+					onDropDownClick={handleSearchDropdownChange}
+					list={genreList}
+				/>
 			</div>
-			<RestaurantsTable restaurants={restaurants} />
+			<RestaurantsTable restaurants={filteredRestaurants} />
 		</div>
 	);
 }
